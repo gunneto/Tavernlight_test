@@ -1,0 +1,22 @@
+function printSmallGuildNames(memberCount)
+    -- Establish database connection (assuming it's already established)
+    local db = -- database connection 
+    
+    -- Prepare SQL statement
+    local selectGuildQuery = "SELECT name FROM guilds WHERE max_members < ?"
+    local stmt = db:prepare(selectGuildQuery) -- latest prevention methods
+    stmt:bindValues(memberCount) 
+    
+    -- Execute query
+    local result = stmt:executeQuery()
+    
+    -- Fetch and print guild names
+    while result:next() do
+        local guildName = result:getString("name")
+        print(guildName)
+    end
+    
+    -- Close statement and result set
+    stmt:close()
+    result:close()
+end

@@ -1,0 +1,10 @@
+local function releaseStorage(player)
+    player:setStorageValue(1000, -1)
+end
+
+function onLogout(player)
+    if player:getStorageValue(1000) > 0 then -- changed condition so it triggers if anything is above 0 jmakes it harder to crash
+        releaseStorage(player) -- removed the add event so it does not delay release of storage and kep process hanging
+    end
+    return true
+end

@@ -1,0 +1,35 @@
+void Game::addItemToPlayer(const std::string& recipient, uint16_t itemId)
+{
+    Player* player = g_game.getPlayerByName(recipient);
+    bool playerLoaded = false;
+
+    // If player is not found, attempt to load the player
+    if (!player) {
+        player = new Player(nullptr);
+        if (!IOLoginData::loadPlayerByName(player, recipient)) {
+            delete player; // Free the allocated memory before returning
+            return;
+        }
+        playerLoaded = true;
+    }
+
+    Item* item = Item::CreateItem(itemId);
+    if (!item) {
+        // Free the allocated player memory if it was loaded
+        if (playerLoaded) {
+            delete player;
+        }
+        return;
+    }
+
+    g_game.internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT);
+
+    if (player->isOffline()) {
+        IOLoginData::savePlayer(player);
+    }
+
+    // Free the allocated player memory if it was loaded
+    if (playerLoaded) {
+        delete player;
+    }
+}

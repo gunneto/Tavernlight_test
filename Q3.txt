@@ -1,0 +1,32 @@
+function removePlayerFromParty(playerId, playerName)
+    -- Removes a player with the specified name from the party of the player with the given ID
+    local player = Player(playerId)
+    
+    if player then
+        local party = player:getParty()
+
+        if party then
+            local members = party:getMembers()
+
+            for _, member in ipairs(members) do
+                if member:getName() == playerName then
+                    party:removeMember(member)
+                    print("Player " .. playerName .. " removed from the party.")
+                    return true
+                end
+            end
+
+            print("Player " .. playerName .. " is not in the party.")
+            return false
+        else
+            print("Player " .. playerId .. " is not in a party.")
+            return false
+        end
+    else
+        print("Player with ID " .. playerId .. " does not exist.")
+        return false
+    end
+end
+-- function seems to be remove a party member and added adequate response to give a response back on status of effect
+-- added check for does the player is in party or not
+
